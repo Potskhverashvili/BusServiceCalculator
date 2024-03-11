@@ -32,20 +32,13 @@ import androidx.compose.ui.unit.sp
 fun BusServiceCalculationApp() {
     var amountOfDiagnostic by remember { mutableStateOf("") }
     var amountOfHours by remember { mutableStateOf("") }
-    var paymentOfDiagnostics by remember { mutableIntStateOf(1) }
-    var paymentOfHours by remember { mutableIntStateOf(1) }
+    var paymentOfDiagnostics by remember { mutableIntStateOf(0) }
+    var paymentOfHours by remember { mutableIntStateOf(0) }
 
     var expanded by remember { mutableStateOf(false) }
     var selectedBus by remember { mutableStateOf("Select") }
 
     val listOfBus = listOf("MAN_21", "MAN_A47", "MAN_18CM", "BMC")
-
-    // Create Objects
-    val manA21 = ServiceCalculation()
-    val manA47 = ServiceCalculation()
-    val man18cm = ServiceCalculation()
-    val bmc = ServiceCalculation()
-
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -53,6 +46,7 @@ fun BusServiceCalculationApp() {
     ) {
         // ------------------- Input Values -----------------
         Spacer(modifier = Modifier.padding(20.dp))
+
         Text(text = "Diagnostic")
         OutlinedTextField(
             value = amountOfDiagnostic,
@@ -90,13 +84,11 @@ fun BusServiceCalculationApp() {
                         onClick = {
                             selectedBus = it
                             expanded = false
-
                         }
                     )
                 }
             }
         }
-
 
         Spacer(modifier = Modifier.padding(30.dp))
         Column(
@@ -108,30 +100,23 @@ fun BusServiceCalculationApp() {
                 fontSize = 30.sp,
             )
 
-            when (selectedBus) {
-                "MAN_21" -> {
-                    paymentOfDiagnostics = manA21.calcOfDiagnostic(amountOfDiagnostic.toInt(), DIAGNOSTIC_PRICE_A21)
-                    paymentOfHours = manA21.calcOfHours(amountOfHours.toInt(), HOUR_PRICE_A21)
-                }
-                "MAN_A47" -> {
-                    paymentOfDiagnostics = manA47.calcOfDiagnostic(amountOfDiagnostic.toInt(), DIAGNOSTIC_PRICE_A47)
-                    paymentOfHours = manA47.calcOfHours(amountOfHours.toInt(), HOUR_PRICE_A47)
-                }
-                "MAN_18CM" -> {
-                    paymentOfDiagnostics = man18cm.calcOfDiagnostic(amountOfDiagnostic.toInt(), DIAGNOSTIC_PRICE_18CM)
-                    paymentOfHours = man18cm.calcOfHours(amountOfHours.toInt(), HOUR_PRICE_18CM)
-                }
-                "BMC" -> {
-                    paymentOfDiagnostics = bmc.calcOfDiagnostic(amountOfDiagnostic.toInt(), DIAGNOSTIC_PRICE_BMC)
-                    paymentOfHours = bmc.calcOfHours(amountOfHours.toInt(), HOUR_PRICE_BMC)
-                }
+            if (amountOfDiagnostic.isNotEmpty() && amountOfHours.isNotEmpty()){
+
+
             }
 
-            Text(
-                text = "$paymentOfHours",
-                fontSize = 30.sp,
-            )
 
+            // ------------------------------ Print Result ---------------------------
+
+                Text(
+                    text = "$amountOfDiagnostic Diagnostic = $paymentOfHours Euro",
+                    fontSize = 20.sp,
+                )
+
+            Text(
+                text = "\n$amountOfHours Hours = $paymentOfDiagnostics Euro",
+                fontSize = 20.sp,
+            )
         }
     }
 }
